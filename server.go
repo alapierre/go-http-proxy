@@ -70,36 +70,9 @@ func handleRequest(resp http.ResponseWriter, req *http.Request) {
 
 	currentTime := time.Now()
 
-	fmt.Printf("Request recieved %s\n", currentTime.Format("2006-01-02 15:04:05.000000"))
+	fmt.Printf("### Request recieved %s\n", currentTime.Format("2006-01-02 15:04:05.000000"))
 	fmt.Print(formatRequest(req))
-	fmt.Printf("\n-------------------- request end -------------------------\n")
-
-	//client := &http.Client{}
-	//req.RequestURI = ""
-
-	//cleanHeaders(req.Header)
-	//
-	//if clientIP, _, err := net.SplitHostPort(req.RemoteAddr); err == nil {
-	//	appendXForwardHeader(req.Header, clientIP)
-	//}
-	//
-	//tmp, err := client.Do(req)
-	//if err != nil {
-	//	http.Error(resp, "Server Error", http.StatusInternalServerError)
-	//	log.Fatal("ServeHTTP:", err)
-	//}
-	//defer closeSilently(tmp.Body)
-	//
-	//fmt.Printf("%s status: %v", req.RemoteAddr, tmp.Status)
-	//
-	//copyHeaders(tmp.Header, resp.Header(), skipSet)
-	//resp.WriteHeader(tmp.StatusCode)
-	//if _, err := io.Copy(resp, tmp.Body); err != nil {
-	//	fmt.Println("Error coping response from client")
-	//}
-	//
-	//fmt.Print(formatResponse(tmp))
-	//fmt.Printf("-------------------- responce end -------------------------")
+	fmt.Printf("\n\n")
 
 }
 
@@ -126,11 +99,13 @@ func formatResponse(r *http.Response) string {
 func formatRequest(r *http.Request) string {
 	// Create return string
 	var request []string
-	// Add the request string
-	url := fmt.Sprintf("%v %v %v", r.Method, r.URL, r.Proto)
+
+	//proto := fmt.Sprintf("%s\n", r.Proto)
+	//request = append(request, proto)
+
+	url := fmt.Sprintf("%s http://%s%s", r.Method, r.Host, r.URL)
 	request = append(request, url)
-	// Add the host
-	request = append(request, fmt.Sprintf("Host: %v", r.Host))
+
 	// Loop through headers
 	for name, headers := range r.Header {
 		name = strings.ToLower(name)
@@ -147,9 +122,8 @@ func formatRequest(r *http.Request) string {
 			fmt.Println(err)
 		}
 
-		fmt.Println("=== body START ===")
-		fmt.Println(string(bytes))
-		fmt.Println("=== body END ===")
+		request = append(request, "")
+		request = append(request, string(bytes))
 
 		//if err := r.ParseForm(); err != nil {
 		//	request = append(request, "\n")

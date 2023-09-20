@@ -1,0 +1,9 @@
+GET http://localhost:8080/test
+
+###
+POST http://localhost:8080/test
+Content-Type: application/json
+
+{
+  "ala": "ma kota"
+}
